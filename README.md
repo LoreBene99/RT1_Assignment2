@@ -40,7 +40,7 @@ Possible commands that the user can make:
 * A = accelerate the robot
 * D = decelerate the robot
 * R = reset its position
-Also if you press Z the user_node will close. 
+  Also if you press Z the user_node will close. 
 
 Nodes
 -----
