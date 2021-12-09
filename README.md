@@ -47,7 +47,7 @@ Nodes
 -----
 ### stage_ros node 
 
-The stage_ros node subscribes to the /cmd_vel topic fromd the package `geometry_msgs` which provides a `Twist` type message to express the velocity of the robot in free space, broken into its linear and angular parts (x,y,z).
+The stage_ros node subscribes to the /cmd_vel topic from the package `geometry_msgs` which provides a `Twist` type message to express the velocity of the robot in free space, broken into its linear and angular parts (x,y,z).
 The stage_ros node also publishes on the `base_scan` topic, from the package called `sensor_msgs` that provides a `LaserScan`, a laser range-finder.
 We had also to call the service `reset_position` from the `std_srvs` package in order to reset the robot position. In `std_srvs` it is contained the `Empty` type service.
 
