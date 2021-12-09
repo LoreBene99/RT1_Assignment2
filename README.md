@@ -29,3 +29,26 @@ Introduction
 ------------
 The environment in which the robot moves is :
 
+<p align="center">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/map.png" width="550" height="400">
+</p>
+
+This environment is provided by the stage_ros node and it is inside the my_world.world file in the folder world. The robot will know everything about the environment thanks to the stage_ros node.
+The robot should go clockwise.
+All the statements in order to let the robot moves, avoiding the walls, are made in the control_node, whereas the user_node should constantly wait for an input by the user, which can either ask to increment or decrement the velocity, or to put the robot in the initial position (thanks to the std_srvs/Empty service). 
+Possible commands that the user can make:
+* A = accelerate the robot
+* D = decelerate the robot
+* R = reset its position
+Also if you press Z the user_node will close. 
+
+Nodes
+-----
+### stage_ros node 
+
+The stage_ros node subscribes to `geometry_msgs` package which provides a `Twist` type message to express the velocity of the robot in free space, broken into its linear and angular parts (x,y,z).
+The stage_ros Node also publishes on the `base_scan` topic, from the package called `sensor_msgs` that provides a `LaserScan`, a laser range-finder.
+We had also to call the service `Empty` from the `std_srvs` package in the control_node in order to reset the robot position.
+
+
+
