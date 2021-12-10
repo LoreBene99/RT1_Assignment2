@@ -234,7 +234,7 @@ Conclusions
 
 I'm satisfied wiht the final result, even if better improvements can be done. I have learned a lot of things about ROS logic, how nodes communicate to each other and how datas and information are exchanged. The robot makes 1++ lap inside the Monza's circuit and works very clearly, BUT of course some improvenments can be done:
 * At high speeds the robot could crush, maybe it is possible to create some statements in order to avoid it, even it is quite normal for this to happen.
-* The robot could have some problems (very rare) in the turning hot spots (like the first curve) and could turn itself in a wrong way, miscalculating the turning decision, going on the opposite direction (#### This is a very rare case, but at high speeds this problem can occurs a FEW more times). Maybe there might be better paramters' values or some particular statements that can be created to avoid this problematic.
+* The robot could have some problems (very rare) in the turning hot spots (like the first curve) and could turn itself in a wrong way, miscalculating the turning decision, going on the opposite direction (### This is a very rare case, but at high speeds this problem can occurs a FEW more times). Maybe there might be better paramters' values or some particular statements that can be created to avoid this problematic.
 
 
 
