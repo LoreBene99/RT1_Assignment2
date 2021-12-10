@@ -236,6 +236,8 @@ I'm satisfied wiht the final result, even if better improvements can be done. I 
 * At high speeds the robot could crush, maybe it is possible to create some statements in order to avoid it, even it is quite normal for this to happen.
 * The robot could have some problems (very rare) in the turning hot spots (like the first curve) and could turn itself in a wrong way, miscalculating the turning decision, going on the opposite direction (*This is a very rare case, but at high speeds this problem can occurs a FEW more times). Maybe there might be better paramters' values or some particular statements that can be created to avoid this problematic*).
 
+I decided also to implement only 2 nodes. If not i should have implemented the server nodes that offers the service about increasing/decreasing the velocity and resetting the robot position (i put all this directly inside the server nodes in our case, that is the control node).
+
 
 
 
