@@ -209,12 +209,21 @@ The service Acceleration.srv is made like this:
      ---
      float32 value
 ```
-Thanks to this service the request is sent to the control node (the request is a char, the one pressed on keyboard) and the server node (control node) will manage the request using a switch. No response will be sent to the user node (the response is a float32 value) since the service operate directly on the control node!
+Thanks to this service the request is sent to the control node (the request is a char, the one pressed on keyboard) and the server node (control node) will manage the request using a switch. No response will be sent to the user node (the response should have been a float32 value) since the service operate directly on the control node!
 
-This is an image that show how nodes are connected to each other:
+Flowchart
+---------
+
+This is an image that show how nodes are connected to each other (thanks to the command rosrun rqt_graph rqt_graph):
 
 <p align="center">
-<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/rosgraph.png" width="550" height="400">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/rosgraph.png" width="700" height="300">
+</p>
+
+This is an image that represents how act the custom service: 
+
+<p align="center">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/flow.png" width="650" height="450">
 </p>
 
 
