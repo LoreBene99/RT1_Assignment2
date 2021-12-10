@@ -176,9 +176,6 @@ if(min_front_dist < 1.6){
 
 The node also behaves like a PUBLISHER since it publish on the topic `/cmd_vel` the type message `cmd_vel geometry_msgs/Twist`, that regards the velocity of the robot, broken in its angular and linear parts (x,y,z). 
 
-This is a flowchart to explain the robot's movements: ??????????????
-FLOWCHART
-
 ### User node
 
 The user node is very important since represents the interface of the user. Through the user node we can increase/decrease the velocity of the robot and reset its position by simple commands:
@@ -226,6 +223,18 @@ This is an image that represents how act the custom service:
 <img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/flowchart.png" width="800" height="450">
 </p>
 
+This is a flowchart that represents the behaviour of the robot inside the environment:
+
+<p align="center">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/robotbeh.png" width="600" height="450">
+</p>
+
+Conclusions
+-----------
+
+I'm satisfied wiht the final result, even if better improvements can be done. I have learned a lot of things about ROS logic, how nodes communicate to each other and how datas and information are exchanged. The robot makes 1++ lap inside the Monza's circuit and works very clearly, BUT of course some improvenments can be done:
+* At high speeds the robot could crush, maybe it is possible to create some statements in order to avoid it, even it is quite normal for this to happen.
+* The robot could have some problems (very rare) in the turning hot spots (like the first curve) and could turn itself in a wrong way, miscalculating the turning decision, going on the opposite direction (#### This is a very rare case, but at high speeds this problem can occurs a FEW more times). Maybe there might be better paramters' values or some particular statements that can be created to avoid this problematic.
 
 
 
