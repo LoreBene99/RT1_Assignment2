@@ -223,7 +223,7 @@ This is an image that show how nodes are connected to each other (thanks to the 
 This is an image that represents how act the custom service: 
 
 <p align="center">
-<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/flow.png" width="650" height="450">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/flow.png" width="600" height="450">
 </p>
 
 
