@@ -77,12 +77,12 @@ float Robot_Distance(int min_value, int max_value, float distance_obs[]){
 	return distance_value;
 }
 ```
-This are the minimun distances for each subsection:
+These are the minimun distances for each subsection:
 
 ```cpp
-float min_right_dist = Robot_Distance(0, 105, laser_scanner);
+	float min_right_dist = Robot_Distance(0, 105, laser_scanner);
 	float min_front_dist = Robot_Distance(305, 405, laser_scanner);
-	float min_left_dist = Robot_Distance(615, 715, laser_scanner);ance_value;
+	float min_left_dist = Robot_Distance(615, 715, laser_scanner);
 }
 ```
 As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the booleand function, that handles the request coming from the user node: 
