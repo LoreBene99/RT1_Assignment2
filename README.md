@@ -41,7 +41,7 @@ Possible commands that the user can make:
 * D = decelerate the robot
 * R = reset its position
 
-Also if you press Z the user_node will close. 
+Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key.  
 
 Nodes
 -----
