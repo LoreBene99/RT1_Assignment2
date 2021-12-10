@@ -63,7 +63,7 @@ bool ServerCallback(second_assignment::Acceleration::Request &req, second_assign
 	// I made a switch in order to discriminate the different buttons we press in the user_node
 	// If "A" is pressed --> increment by 0.5 the plus variable
 	// If "D" is pressed --> decrement by 0.5 the plus variable
-	// If "R" is pressed --> the control_node will call the reset service and the robot will reset its position back to the start
+	// If "R" is pressed --> the control_node will call the /reset_postions service and the robot will reset its position back to the start
 	// Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key. 
 	// The terminal will let us know if another button is pressed
 	
