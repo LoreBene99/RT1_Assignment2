@@ -35,21 +35,99 @@ The environment in which the robot moves is :
 
 This environment is provided by the stage_ros node and it is inside the my_world.world file in the folder world. The robot will know everything about the environment thanks to the stage_ros node.
 The robot should go clockwise.
-All the statements in order to let the robot moves, avoiding the walls, are made in the control_node, whereas the user_node should constantly wait for an input by the user, which can either ask to increment or decrement the velocity, or to put the robot in the initial position (thanks to the std_srvs/Empty service). 
+All the statements in order to let the robot moves, avoiding the walls, are made in the control node, whereas the user node should constantly wait for an input by the user, which can either ask to increment or decrement the velocity, or to put the robot in the initial position (thanks to the std_srvs/Empty service). 
 Possible commands that the user can make:
 * A = accelerate the robot
 * D = decelerate the robot
 * R = reset its position
 
-Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key.  
+In the boolean function (in the control node), there might notice Z. Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key.  
 
 Nodes
 -----
-### stage_ros node 
+### Stage_ros node 
 
 The stage_ros node subscribes to the /cmd_vel topic from the package `geometry_msgs` which provides a `Twist` type message to express the velocity of the robot in free space, broken into its linear and angular parts (x,y,z).
 The stage_ros node also publishes on the `base_scan` topic, from the package called `sensor_msgs` that provides a `LaserScan`, a laser range-finder.
 We had also to call the service `reset_positions` from the `std_srvs` package in order to reset the robot position. In `std_srvs` it is contained the `Empty` type service.
+
+### Control node
+
+In the control node there is the main code of the project. This node handles multiple information, moreover it contains the main structure of the code which allows the robot to avoid hitting wall and drive through the circuit without any problem. Furthermore the node permits to increment/decrement the velocity of the robot and reset its position (through the input given from keyboard and passed by the service `/acceleration`; in fact it is the server node which receives the request from the user node (client node)). 
+In the `base_scan` topic, which provides datas about the laser that scans the surrounding environment, there is the type message: `sensor_msgs/LaserScan`. The topic provides an array, which returns the distances between the robot and the obstacles; every distance is given by the array ranges[i] (i = 0,...,720) and it is computed considering each of 721 section in which the vision of the robot is divided, since the vision of the robot is included in a spectrum range of 180 degrees in front of it and expressed in radiant. I have separated 3 big subsections (right, left and in front of the robot), inside the 0-720 spectrum, for the vision of the robot and i have computed the minimum distance between the robot and the obstacle for each subsection, in order to implement the similar logic seen in the previous assignment. This is the function:
+
+```cpp
+float Robot_Distance(int min_value, int max_value, float distance_obs[]){
+	
+	// setting a general distance value for comparison
+	
+	float distance_value = 40.0;
+	
+	// Thanks to this for, we will obtain the minimum distance from an obstacle
+	// inside that particular subsection	
+
+	for(int i = min_value; i <= max_value; i++){
+		
+		if(distance_obs[i] <= distance_value){
+		
+			distance_value = distance_obs[i];
+		}
+	}
+	
+	return distance_value;
+}
+```
+This are the minimun distances for each subsection:
+
+```cpp
+float min_right_dist = Robot_Distance(0, 105, laser_scanner);
+	float min_front_dist = Robot_Distance(305, 405, laser_scanner);
+	float min_left_dist = Robot_Distance(615, 715, laser_scanner);ance_value;
+}
+```
+As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the booleand function, that handles the request coming from the user node: 
+
+```cpp
+switch(req.Kinput){
+	
+	// I made a switch in order to discriminate the different buttons we press in the user_node
+	// If "A" is pressed --> increment by 0.5 the plus variable
+	// If "D" is pressed --> decrement by 0.5 the plus variable
+	// If "R" is pressed --> the control_node will call the reset service and the robot will reset its position back to the start
+	// Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key. 
+	// The terminal will let us know if another button is pressed
+	
+		case('a'):
+			plus += 0.5;
+			req.Kinput = 'z';
+			
+			// Thanks to ROS_INFO, on the terminal there will be printed the increment of acceleration
+	
+			ROS_INFO("\nIncrement of acceleration :@[%f]", plus);
+		break;
+		
+		case('d'):
+			plus -= 0.5;
+			req.Kinput = 'z';
+			ROS_INFO("\nIncrement of acceleration :@[%f]", plus);
+		break;
+		
+		case('r'):
+			ros::service::call("/reset_positions", res_pos);
+			req.Kinput = 'z';
+		break;
+		
+		case('z'):
+			return false;
+		break;
+		
+		default: 
+			std::cout << "Wrong command!\n";
+			fflush(stdout);
+		break;
+	}
+```
+
 
 
 
