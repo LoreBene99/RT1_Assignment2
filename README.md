@@ -53,7 +53,7 @@ We had also to call the service `reset_positions` from the `std_srvs` package in
 
 ### Control node
 
-In the control node there is the main code of the project. This node handles multiple information, moreover it contains the main structure of the code which allows the robot to avoid hitting wall and drive through the circuit without any problem. Furthermore the node permits to increment/decrement the velocity of the robot and reset its position (through the inputs given from keyboard and "passed" by the service `/acceleration`, in which Acceleration.srv handles two elements: char Kinput, that is the request from the client and float32 value, that is the response from the server; in fact the control node is the server node that receives the request from the user node (client node)). 
+In the control node there is the main code of the project. This node handles multiple information, moreover it contains the main structure of the code which allows the robot to avoid hitting wall and drive through the circuit without any problem. Furthermore the node permits to increment/decrement the velocity of the robot and reset its position (through the inputs given from keyboard and "passed" by the custom service `Acceleration.srv` (in the srv folder) that handles two elements: char Kinput, that is the request from the client and float32 value, that is the response from the server; in fact the control node is the server node that receives the request from the user node (client node)). 
 In the `base_scan` topic, which provides datas about the laser that scans the surrounding environment, there is the type message `sensor_msgs/LaserScan`. The topic provides an array, which returns the distances between the robot and the obstacles; every distance is given by the array ranges[i] (i = 0,...,720) and it is computed considering each of 721 section in which the vision of the robot is divided, since the vision of the robot is included in a spectrum range of 180 degrees in front of it and expressed in radiant. I have separated 3 big subsections (right, left and in front of the robot), inside the 0-720 spectrum, for the vision of the robot and i have computed the minimum distance between the robot and the obstacle for each subsection, in order to implement the similar logic seen in the previous assignment. This is the function:
 
 ```cpp
@@ -85,7 +85,7 @@ These are the minimun distances for each subsection (done in the RobotCallback f
 	float min_left_dist = Robot_Distance(615, 715, laser_scanner);
 }
 ```
-As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the booleand function, that handles the request coming from the user node (no response are sent to the user node) : 
+As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the boolean function, that handles the request coming from the user node (no response are sent to the user node) : 
 
 ```cpp
 switch(req.Kinput){
@@ -180,6 +180,47 @@ This is a flowchart to explain the robot's movements: ??????????????
 FLOWCHART
 
 ### User node
+
+The user node is very important since represents the interface of the user. Through the user node we can increase/decrease the velocity of the robot and reset its position by simple commands:
+* A --> accelerate the robot by 0.5
+* D --> decelerate the robot by 0.5 
+* R --> reset robot position. 
+
+All the commmands are detected from the keyboards thanks to this function:
+
+```cpp
+char GETCHAR(void){
+
+	char ch;
+	
+	std::cout << "ACCELERATE the robot: press A\n";
+	std::cout << "DECELERATE the robot: press D\n";
+	std::cout << "RESET the robot's position: press R\n";
+	
+	std::cin >> ch;
+	
+	return ch;
+}
+```
+The service Acceleration.srv is made like this:
+
+``` xml
+     char Kinput
+     ---
+     float32 value
+```
+Thanks to this service the request is sent to the control node (the request is a char, the one pressed on keyboard) and the server node (control node) will manage the request using a switch. No response will be sent to the user node (the response is a float32 value) since the service operate directly on the control node!
+
+This is an image that show how nodes are connected to each other:
+
+<p align="center">
+<img src="https://github.com/LoreBene99/RT1_Assignment2/blob/main/images/rosgraph.png" width="550" height="400">
+</p>
+
+
+
+
+
 
 
 	
