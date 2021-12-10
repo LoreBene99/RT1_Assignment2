@@ -172,12 +172,16 @@ if(min_front_dist < 1.6){
 		}
 	}
 ```
-### NB: The parameters (such as 0.6, 1, -1) have been tested pesonally and i consider these as the best ones in order to let the robot makes various loops clocwisely. BUT a problem may occurs if the user increments by A LOT (!!!!) the speed of the robot--> it may crush (or having problems on turning in the right direction, going counterclockwise).
+#### NB: The parameters (such as 0.6, 1, -1) have been tested pesonally and i consider these as the best ones in order to let the robot makes various loops clocwisely. BUT a problem may occurs if the user increments by A LOT (!!!!) the speed of the robot--> it may crush (or having problems on turning in the right direction, going counterclockwise).
 
 The node also behaves like a PUBLISHER since it publish on the topic `/cmd_vel` the type message `cmd_vel geometry_msgs/Twist`, that regards the velocity of the robot, broken in its angular and linear parts (x,y,z). 
 
 This is a flowchart to explain the robot's movements: ??????????????
 FLOWCHART
+
+### User node
+
+
 	
 
 
