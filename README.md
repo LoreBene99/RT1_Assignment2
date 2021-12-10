@@ -54,7 +54,7 @@ We had also to call the service `reset_positions` from the `std_srvs` package in
 ### Control node
 
 In the control node there is the main code of the project. This node handles multiple information, moreover it contains the main structure of the code which allows the robot to avoid hitting wall and drive through the circuit without any problem. Furthermore the node permits to increment/decrement the velocity of the robot and reset its position (through the input given from keyboard and passed by the service `/acceleration`; in fact it is the server node which receives the request from the user node (client node)). 
-In the `base_scan` topic, which provides datas about the laser that scans the surrounding environment, there is the type message: `sensor_msgs/LaserScan`. The topic provides an array, which returns the distances between the robot and the obstacles; every distance is given by the array ranges[i] (i = 0,...,720) and it is computed considering each of 721 section in which the vision of the robot is divided, since the vision of the robot is included in a spectrum range of 180 degrees in front of it and expressed in radiant. I have separated 3 big subsections (right, left and in front of the robot), inside the 0-720 spectrum, for the vision of the robot and i have computed the minimum distance between the robot and the obstacle for each subsection, in order to implement the similar logic seen in the previous assignment. This is the function:
+In the `base_scan` topic, which provides datas about the laser that scans the surrounding environment, there is the type message `sensor_msgs/LaserScan`. The topic provides an array, which returns the distances between the robot and the obstacles; every distance is given by the array ranges[i] (i = 0,...,720) and it is computed considering each of 721 section in which the vision of the robot is divided, since the vision of the robot is included in a spectrum range of 180 degrees in front of it and expressed in radiant. I have separated 3 big subsections (right, left and in front of the robot), inside the 0-720 spectrum, for the vision of the robot and i have computed the minimum distance between the robot and the obstacle for each subsection, in order to implement the similar logic seen in the previous assignment. This is the function:
 
 ```cpp
 float Robot_Distance(int min_value, int max_value, float distance_obs[]){
@@ -77,7 +77,7 @@ float Robot_Distance(int min_value, int max_value, float distance_obs[]){
 	return distance_value;
 }
 ```
-These are the minimun distances for each subsection:
+These are the minimun distances for each subsection (done in the RobotCallback function):
 
 ```cpp
 	float min_right_dist = Robot_Distance(0, 105, laser_scanner);
@@ -85,7 +85,7 @@ These are the minimun distances for each subsection:
 	float min_left_dist = Robot_Distance(615, 715, laser_scanner);
 }
 ```
-As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the booleand function, that handles the request coming from the user node: 
+As i said before the node permits to increment/decrement the velocity of the robot and reset its position and it is done thanks to this "switch", inside the booleand function, that handles the request coming from the user node (no response are sent to the user node) : 
 
 ```cpp
 switch(req.Kinput){
@@ -93,7 +93,7 @@ switch(req.Kinput){
 	// I made a switch in order to discriminate the different buttons we press in the user_node
 	// If "A" is pressed --> increment by 0.5 the plus variable
 	// If "D" is pressed --> decrement by 0.5 the plus variable
-	// If "R" is pressed --> the control_node will call the reset service and the robot will reset its position back to the start
+	// If "R" is pressed --> the control_node will call the /reset_positions service and the robot will reset its position back to the start
 	// Z is importat since will let return false about the boolean function, so the velocity doesn't increment without pressing any key. 
 	// The terminal will let us know if another button is pressed
 	
@@ -127,7 +127,58 @@ switch(req.Kinput){
 		break;
 	}
 ```
+### plus is a globar variable that increment/decrement by 0.5 each time a button (A/D) is pressed by the user. 
 
+These are the simple statements in order to let the robot drive easily through the circuit:
+The following control is implemented in the RobotCallback function that will be called whenever a message is posted on the `base_scan` topic.
+
+```cpp
+if(min_front_dist < 1.6){
+			
+    	if(min_right_dist < min_left_dist){
+    	
+    	// The robot will turn right if the minimum distance from the wall on the left is 
+	// greater than the distance of the wall on the right
+    	
+    		my_vel.angular.z = 1.0;
+    		my_vel.linear.x = 0.1;
+		}
+		
+		else if(min_right_dist > min_left_dist){
+		
+    	// The robot will turn left if the minimum distance from the wall on the right is 
+		// greater than the distance of the wall on the left
+		
+			my_vel.angular.z = -1.0;
+			my_vel.linear.x = 0.1;
+		}
+	}
+		
+	else{
+	
+	// If the robot doesn't have to make a curve to avoid hitting walls, will go straight.
+	
+	// The plus variable will increment/decrement if we press "A"/"D" on the user_node
+	
+	my_vel.linear.x = 1.0 + plus;
+	my_vel.angular.z = 0.0;
+	
+		// Just a simple control to avoid make the robot going backwards.
+	
+		if(my_vel.linear.x < 0.0){
+			
+			my_vel.linear.x = 0.0;
+			my_vel.angular.z = 0.0;
+		}
+	}
+```
+### NB: The parameters (such as 0.6, 1, -1) have been tested pesonally and i consider these as the best ones in order to let the robot makes various loops clocwisely. BUT a problem may occurs if the user increments by A LOT (!!!!) the speed of the robot--> it may crush (or having problems on turning in the right direction, going counterclockwise).
+
+The node also behaves like a PUBLISHER since it publish on the topic `/cmd_vel` the type message `cmd_vel geometry_msgs/Twist`, that regards the velocity of the robot, broken in its angular and linear parts (x,y,z). 
+
+This is a flowchart to explain the robot's movements: ??????????????
+FLOWCHART
+	
 
 
 
